@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE repositories SYSTEM "repositories.dtd">
+<repositories xmlns="" version="1.0">
+  <repo quality="experimental" status="unofficial">
+    <name>udev-overlay</name>
+    <description>Overlay for Gentoo Udev Development</description>
+    <homepage>https://github.com/gentoo/udev-overlay</homepage>
+    <owner type="project">
+      <email>ryao@gentoo.org</email>
+      <name>Richard Yao</name>
+    </owner>
+    <source type="git">git://github.com/gentoo/udev-overlay.git</source>
+    <feed>https://github.com/gentoo/udev-overlay/commits/master.atom</feed>
+  </repo>
+</repositories>
