@@ -10,7 +10,7 @@ inherit autotools eutils linux-info
 
 if [[ ${PV} = 9999* ]]
 then
-	EGIT_REPO_URI="git://github.com/gentoo/udev-ng.git"
+	EGIT_REPO_URI="git://github.com/gentoo/eudev.git"
 	inherit git-2
 else
 	patchset=
