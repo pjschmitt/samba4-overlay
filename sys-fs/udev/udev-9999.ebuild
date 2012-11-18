@@ -159,7 +159,7 @@ src_configure()
 
 src_compile()
 {
-	emake -j1
+	emake
 #	echo 'BUILT_SOURCES: $(BUILT_SOURCES)' > "${T}"/Makefile.extra
 #	emake -f Makefile -f "${T}"/Makefile.extra BUILT_SOURCES
 #	local targets=(
