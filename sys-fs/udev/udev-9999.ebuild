@@ -342,16 +342,6 @@ pkg_postinst()
 		ewarn "http://bugs.gentoo.org/show_bug.cgi?id=433746#c1"
 	fi
 
-	if [[ -d ${ROOT}lib/udev ]]
-	then
-		ewarn
-		ewarn "This version of udev moves the files which were installed in"
-		ewarn "/lib/udev to /usr/lib/udev. We include a backward compatibility"
-		ewarn "patch for gentoo to allow the rules in /lib/udev/rules.d to be"
-		ewarn "read; however, bugs should be filed against packages which are"
-		ewarn "installing things in /lib/udev so they can be fixed."
-	fi
-
 	ewarn
 	ewarn "You need to restart udev as soon as possible to make the upgrade go"
 	ewarn "into effect."
