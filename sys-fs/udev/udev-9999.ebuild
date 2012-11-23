@@ -28,7 +28,7 @@ HOMEPAGE="https://github.com/gentoo/udev-ng"
 
 LICENSE="LGPL-2.1 MIT GPL-2"
 SLOT="0"
-IUSE="acl doc gudev hwdb introspection keymap +openrc selinux static-libs"
+IUSE="acl doc gudev hwdb kmod introspection keymap +modules +openrc selinux static-libs"
 
 RESTRICT="test"
 
@@ -151,6 +151,8 @@ src_configure()
 		$(use_enable gudev)
 		$(use_enable introspection)
 		$(use_enable keymap)
+		$(use_enable kmod libkmod)
+		$(use_enable modules)
 		$(use_enable selinux)
 		$(use_enable static-libs static)
 	)
