@@ -159,89 +159,17 @@ src_configure()
 	econf "${econf_args[@]}"
 }
 
-src_compile()
-{
-	emake
-#	echo 'BUILT_SOURCES: $(BUILT_SOURCES)' > "${T}"/Makefile.extra
-#	emake -f Makefile -f "${T}"/Makefile.extra BUILT_SOURCES
-#	local targets=(
-#		udevd
-#		udevadm
-#		libudev.la
-#		ata_id
-#		cdrom_id
-#		collect
-#		scsi_id
-#		v4l_id
-#		accelerometer
-#		mtd_probe
-#		man/udev.7
-#		man/udevadm.8
-#		man/udevd.8
-#		man/udevd.service.8
-#	)
-#	use keymap && targets+=( keymap )
-#	use gudev && targets+=( libgudev-1.0.la )
-#
-#	emake "${targets[@]}"
-#	if use doc
-#	then
-#		emake -C docs/libudev
-#		use gudev && emake -C docs/gudev
-#	fi
-}
-
 src_install()
 {
 	local lib_LTLIBRARIES=libudev.la \
 		pkgconfiglib_DATA=src/libudev/libudev.pc
-#
-#	local targets=(
-#		install-libLTLIBRARIES
-#		install-includeHEADERS
-#		install-libgudev_includeHEADERS
-#		install-binPROGRAMS
-#		install-rootlibexecPROGRAMS
-#		install-udevlibexecPROGRAMS
-#		install-dist_systemunitDATA
-#		install-dist_udevconfDATA
-#		install-dist_udevhomeSCRIPTS
-#		install-dist_udevkeymapDATA
-#		install-dist_udevkeymapforcerelDATA
-#		install-dist_udevrulesDATA
-#		install-girDATA
-#		install-man7
-#		install-man8
-#		install-nodist_systemunitDATA
-#		install-pkgconfiglibDATA
-#		install-sharepkgconfigDATA
-#		install-typelibsDATA
-#		install-dist_docDATA
-#		udev-confdirs
-#		systemd-install-hook
-#	)
-#
+
 	if use gudev
 	then
 		lib_LTLIBRARIES+=" libgudev-1.0.la"
 		pkgconfiglib_DATA+=" src/gudev/gudev-1.0.pc"
 	fi
 
-#	# add final values of variables:
-#	targets+=(
-#		rootlibexec_PROGRAMS=systemd-udevd
-#		bin_PROGRAMS=udevadm
-#		lib_LTLIBRARIES="${lib_LTLIBRARIES}"
-#		MANPAGES="man/udev.7 man/udevadm.8 man/systemd-udevd.service.8"
-#		MANPAGES_ALIAS="man/systemd-udevd.8"
-#		dist_systemunit_DATA="units/systemd-udevd-control.socket \
-#			units/systemd-udevd-kernel.socket"
-#		nodist_systemunit_DATA="units/systemd-udevd.service \
-#				units/systemd-udev-trigger.service \
-#				units/systemd-udev-settle.service"
-#		pkgconfiglib_DATA="${pkgconfiglib_DATA}"
-#	)
-#	emake DESTDIR="${D}" "${targets[@]}"
 	emake DESTDIR="${D}" install
 #	if use doc
 #	then
