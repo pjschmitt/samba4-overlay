@@ -144,6 +144,7 @@ src_configure()
 		--with-firmware-path=${EROOT}/usr/lib/firmware/updates:/usr/lib/firmware:/lib/firmware/updates:/lib/firmware
 		--with-html-dir=${EROOT}/usr/share/doc/${PF}/html
 		--with-rootlibdir=${EROOT}/$(get_libdir)
+		--exec-prefix=${EROOT}
 		--enable-split-usr
 		$(use_enable acl)
 		$(use_enable doc gtk-doc)
