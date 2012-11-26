@@ -138,13 +138,12 @@ src_configure()
 		ac_cv_header_sys_capability_h=yes
 		DBUS_CFLAGS=' '
 		DBUS_LIBS=' '
-		--prefix=/
-		--with-rootprefix=/
-		--docdir=/usr/share/doc/${PF}
-		--libdir=/$(get_libdir)
-		--with-firmware-path=/usr/lib/firmware/updates:/usr/lib/firmware:/lib/firmware/updates:/lib/firmware
-		--with-html-dir=/usr/share/doc/${PF}/html
-		--with-rootlibdir=/$(get_libdir)
+		--with-rootprefix=${EROOT}
+		--docdir=${EROOT}/usr/share/doc/${PF}
+		--libdir=${EROOT}/usr/$(get_libdir)
+		--with-firmware-path=${EROOT}/usr/lib/firmware/updates:/usr/lib/firmware:/lib/firmware/updates:/lib/firmware
+		--with-html-dir=${EROOT}/usr/share/doc/${PF}/html
+		--with-rootlibdir=${EROOT}/$(get_libdir)
 		--enable-split-usr
 		$(use_enable acl)
 		$(use_enable doc gtk-doc)
