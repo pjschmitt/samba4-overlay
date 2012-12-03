@@ -171,16 +171,16 @@ src_install()
 		pkgconfiglib_DATA+=" src/gudev/gudev-1.0.pc"
 	fi
 
-	emake DESTDIR="${D}" install
+	emake DESTDIR="${ED}" install
 #	if use doc
 #	then
-#		emake -C docs/libudev DESTDIR="${D}" install
-#		use gudev && emake -C docs/gudev DESTDIR="${D}" install
+#		emake -C docs/libudev DESTDIR="${ED}" install
+#		use gudev && emake -C docs/gudev DESTDIR="${ED}" install
 #	fi
 #	dodoc TODO
 #
 	prune_libtool_files --all
-#	rm -rf "${D}"/usr/share/doc/${PF}/LICENSE.*
+#	rm -rf "${ED}"/usr/share/doc/${PF}/LICENSE.*
 #
 #	# install gentoo-specific rules
 	insinto /usr/lib/udev/rules.d
@@ -191,11 +191,11 @@ pkg_preinst()
 {
 	local htmldir
 	for htmldir in gudev libudev; do
-		if [[ -d ${ROOT}usr/share/gtk-doc/html/${htmldir} ]]
+		if [[ -d ${EROOT}usr/share/gtk-doc/html/${htmldir} ]]
 		then
-			rm -rf "${ROOT}"usr/share/gtk-doc/html/${htmldir}
+			rm -rf "${EROOT}"usr/share/gtk-doc/html/${htmldir}
 		fi
-		if [[ -d ${D}/usr/share/doc/${PF}/html/${htmldir} ]]
+		if [[ -d ${ED}/usr/share/doc/${PF}/html/${htmldir} ]]
 		then
 			dosym ../../doc/${PF}/html/${htmldir} \
 				/usr/share/gtk-doc/html/${htmldir}
@@ -206,12 +206,12 @@ pkg_preinst()
 
 pkg_postinst()
 {
-	mkdir -p "${ROOT}"/run
+	mkdir -p "${EROOT}"/run
 
 	# "losetup -f" is confused if there is an empty /dev/loop/, Bug #338766
 	# So try to remove it here (will only work if empty).
-	rmdir "${ROOT}"/dev/loop 2>/dev/null
-	if [[ -d ${ROOT}/dev/loop ]]
+	rmdir "${EROOT}"/dev/loop 2>/dev/null
+	if [[ -d ${EROOT}/dev/loop ]]
 	then
 		ewarn "Please make sure your remove /dev/loop,"
 		ewarn "else losetup may be confused when looking for unused devices."
