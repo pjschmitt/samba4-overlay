@@ -13,13 +13,7 @@ then
 	EGIT_REPO_URI="git://github.com/gentoo/eudev.git"
 	inherit git-2
 else
-	patchset=
 	SRC_URI="http://www.freedesktop.org/software/systemd/systemd-${PV}.tar.xz"
-	if [[ -n "${patchset}" ]]
-		then
-				SRC_URI="${SRC_URI}
-					http://dev.gentoo.org/~williamh/dist/${P}-patches-${patchset}.tar.bz2"
-			fi
 	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86"
 fi
 
@@ -105,16 +99,12 @@ pkg_setup()
 
 src_prepare()
 {
-	# backport some patches
-	if [[ -n "${patchset}" ]]
-	then
-		EPATCH_SUFFIX=patch EPATCH_FORCE=yes epatch
-	fi
-
 	# change rules back to group uucp instead of dialout for now
 	sed -e 's/GROUP="dialout"/GROUP="uucp"/' \
 		-i rules/*.rules \
 	|| die "failed to change group dialout to uucp"
+
+	epatch_user
 
 	if [[ ! -e configure ]]
 	then
