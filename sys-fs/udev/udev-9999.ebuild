@@ -162,16 +162,9 @@ src_install()
 	fi
 
 	emake DESTDIR="${ED}" install
-#	if use doc
-#	then
-#		emake -C docs/libudev DESTDIR="${ED}" install
-#		use gudev && emake -C docs/gudev DESTDIR="${ED}" install
-#	fi
-#	dodoc TODO
-#
+
 	prune_libtool_files --all
-#	rm -rf "${ED}"/usr/share/doc/${PF}/LICENSE.*
-#
+
 #	# install gentoo-specific rules
 	insinto /usr/lib/udev/rules.d
 	doins "${FILESDIR}"/40-gentoo.rules
