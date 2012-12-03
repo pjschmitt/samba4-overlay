@@ -139,13 +139,13 @@ src_configure()
 		ac_cv_header_sys_capability_h=yes
 		DBUS_CFLAGS=' '
 		DBUS_LIBS=' '
-		--with-rootprefix=${EROOT}
-		--docdir=${EROOT}/usr/share/doc/${PF}
-		--libdir=${EROOT}/usr/$(get_libdir)
-		--with-firmware-path=${EROOT}/usr/lib/firmware/updates:/usr/lib/firmware:/lib/firmware/updates:/lib/firmware
-		--with-html-dir=${EROOT}/usr/share/doc/${PF}/html
-		--with-rootlibdir=${EROOT}/$(get_libdir)
-		--exec-prefix=${EROOT}
+		--with-rootprefix="${EROOT}"
+		--docdir="${EROOT}/usr/share/doc/${PF}"
+		--libdir="${EROOT}/usr/$(get_libdir)"
+		--with-firmware-path="${EROOT}/usr/lib/firmware/updates:${EROOT}/usr/lib/firmware:${EROOT}/lib/firmware/updates:${EROOT}/lib/firmware"
+		--with-html-dir="${EROOT}/usr/share/doc/${PF}/html"
+		--with-rootlibdir="${EROOT}/$(get_libdir)"
+		--exec-prefix="${EROOT}"
 		--enable-split-usr
 		$(use_enable acl)
 		$(use_enable doc gtk-doc)
@@ -183,8 +183,8 @@ src_install()
 #	rm -rf "${D}"/usr/share/doc/${PF}/LICENSE.*
 #
 #	# install gentoo-specific rules
-#	insinto /usr/lib/udev/rules.d
-#	doins "${FILESDIR}"/40-gentoo.rules
+	insinto /usr/lib/udev/rules.d
+	doins "${FILESDIR}"/40-gentoo.rules
 }
 
 pkg_preinst()
@@ -201,7 +201,7 @@ pkg_preinst()
 				/usr/share/gtk-doc/html/${htmldir}
 		fi
 	done
-	preserve_old_lib /$(get_libdir)/libudev.so.0
+	preserve_old_lib "/$(get_libdir)/libudev.so.0"
 }
 
 pkg_postinst()
@@ -222,7 +222,7 @@ pkg_postinst()
 	ewarn "into effect."
 	ewarn "The method you use to do this depends on your init system."
 
-	preserve_old_lib_notify /$(get_libdir)/libudev.so.0
+	preserve_old_lib_notify "/$(get_libdir)/libudev.so.0"
 
 	elog
 	elog "For more information on udev on Gentoo, writing udev rules, and"
