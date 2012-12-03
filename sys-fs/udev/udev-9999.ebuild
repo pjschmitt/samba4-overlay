@@ -185,9 +185,6 @@ src_install()
 #	# install gentoo-specific rules
 #	insinto /usr/lib/udev/rules.d
 #	doins "${FILESDIR}"/40-gentoo.rules
-#
-#	# install udevadm symlink
-#	dosym ../usr/bin/udevadm /sbin/udevadm
 }
 
 pkg_preinst()
@@ -218,59 +215,6 @@ pkg_postinst()
 	then
 		ewarn "Please make sure your remove /dev/loop,"
 		ewarn "else losetup may be confused when looking for unused devices."
-	fi
-
-	# people want reminders, I'll give them reminders.  Odds are they will
-	# just ignore them anyway...
-
-	# 64-device-mapper.rules now gets installed by sys-fs/device-mapper
-	# remove it if user don't has sys-fs/device-mapper installed, 27 Jun 2007
-	if [[ -f ${ROOT}/etc/udev/rules.d/64-device-mapper.rules ]] &&
-		! has_version sys-fs/device-mapper
-	then
-			rm -f "${ROOT}"/etc/udev/rules.d/64-device-mapper.rules
-			einfo "Removed unneeded file 64-device-mapper.rules"
-	fi
-
-	# http://bugs.gentoo.org/440462
-	if [[ ${REPLACING_VERSIONS} ]] && [[ ${REPLACING_VERSIONS} < 141 ]]; then
-		ewarn
-		ewarn "If you build an initramfs including udev, please make sure the"
-		ewarn "/usr/bin/udevadm binary gets included, Also, change your scripts to"
-		ewarn "use it, as it replaces the old udevinfo and udevtrigger helpers."
-
-		ewarn
-		ewarn "mount options for /dev are no longer set in /etc/udev/udev.conf."
-		ewarn "Instead, /etc/fstab should be used. This matches other mount points."
-	fi
-
-	if [[ ${REPLACING_VERSIONS} ]] && [[ ${REPLACING_VERSIONS} < 151 ]]; then
-		ewarn
-		ewarn "Rules for /dev/hd* devices have been removed."
-		ewarn "Please migrate to libata."
-	fi
-
-	if [[ ${REPLACING_VERSIONS} ]] && [[ ${REPLACING_VERSIONS} < 189 ]]; then
-		ewarn
-		ewarn "action_modeswitch has been removed by upstream."
-		ewarn "Please use sys-apps/usb_modeswitch."
-
-		if use acl; then
-			ewarn
-			ewarn "The udev-acl functionality has been moved."
-			ewarn "If you are not using systemd, this is handled by ConsoleKit."
-			ewarn "Otherwise, you need to make sure that systemd is emerged with"
-			ewarn "the acl use flag active."
-		fi
-
-		ewarn
-		ewarn "Upstream has removed the persistent-net and persistent-cd rules"
-		ewarn "generator. If you need persistent names for these devices,"
-		ewarn "place udev rules for them in ${ROOT}etc/udev/rules.d."
-		ewarn "Be aware that you cannot directly swap device names, so persistent"
-		ewarn "rules for network devices should be like the ones at the following"
-		ewarn "URL:"
-		ewarn "http://bugs.gentoo.org/show_bug.cgi?id=433746#c1"
 	fi
 
 	ewarn
