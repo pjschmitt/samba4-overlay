@@ -35,6 +35,7 @@ RESTRICT="test"
 COMMON_DEPEND="acl? ( sys-apps/acl )
 	gudev? ( dev-libs/glib:2 )
 	introspection? ( >=dev-libs/gobject-introspection-1.31.1 )
+	kmod? ( >=sys-apps/kmod-11-r3 )
 	selinux? ( sys-libs/libselinux )
 	>=sys-apps/util-linux-2.20
 	!<sys-libs/glibc-2.11"
@@ -80,7 +81,7 @@ udev_check_KV()
 pkg_setup()
 {
 	# required kernel options
-	CONFIG_CHECK="~DEVTMPFS"
+	CONFIG_CHECK="~BLK_DEV_BSG ~DEVTMPFS ~!IDE ~INOTIFY_USER ~SIGNALFD ~!SYSFS_DEPRECATED ~!SYSFS_DEPRECATED_V2"
 	ERROR_DEVTMPFS="DEVTMPFS is not set in this kernel. Udev will not run."
 
 	linux-info_pkg_setup
