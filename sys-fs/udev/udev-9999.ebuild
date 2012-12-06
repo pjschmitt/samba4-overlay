@@ -13,7 +13,7 @@ then
 	EGIT_REPO_URI="git://github.com/gentoo/eudev.git"
 	inherit git-2
 else
-	SRC_URI="http://www.freedesktop.org/software/systemd/systemd-${PV}.tar.xz"
+	SRC_URI="https://github.com/gentoo/${PN}/archive/${P}.tar.gz"
 	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86"
 fi
 
@@ -22,14 +22,12 @@ HOMEPAGE="https://github.com/gentoo/udev-ng"
 
 LICENSE="LGPL-2.1 MIT GPL-2"
 SLOT="0"
-IUSE="acl doc gudev hwdb kmod introspection keymap +modules +openrc selinux static-libs"
+IUSE="doc gudev hwdb kmod introspection keymap +modutils +openrc selinux static-libs"
 
 RESTRICT="test"
 
-COMMON_DEPEND="acl? ( sys-apps/acl )
-	gudev? ( dev-libs/glib:2 )
+COMMON_DEPEND="gudev? ( dev-libs/glib:2 )
 	introspection? ( >=dev-libs/gobject-introspection-1.31.1 )
-	kmod? ( >=sys-apps/kmod-11-r3 )
 	selinux? ( sys-libs/libselinux )
 	>=sys-apps/util-linux-2.20
 	!<sys-libs/glibc-2.11"
@@ -51,15 +49,12 @@ fi
 
 RDEPEND="${COMMON_DEPEND}
 	hwdb? ( sys-apps/hwids )
-	openrc? ( >=sys-fs/udev-init-scripts-16
-		!<sys-apps/openrc-0.9.9 )
+	openrc? ( >=sys-fs/udev-init-scripts-18 )
 	!sys-apps/coldplug
 	!sys-apps/systemd
 	!<sys-fs/lvm2-2.02.45
 	!sys-fs/device-mapper
-	!<sys-fs/udev-init-scripts-16
-	!<sys-kernel/dracut-017-r1
-	!<sys-kernel/genkernel-3.4.25"
+	!<sys-fs/udev-init-scripts-18"
 
 S="${WORKDIR}/udev-${PV}"
 
@@ -137,13 +132,12 @@ src_configure()
 		--with-rootlibdir="${EROOT}/$(get_libdir)"
 		--exec-prefix="${EROOT}"
 		--enable-split-usr
-		$(use_enable acl)
 		$(use_enable doc gtk-doc)
 		$(use_enable gudev)
 		$(use_enable introspection)
 		$(use_enable keymap)
 		$(use_enable kmod libkmod)
-		$(use_enable modules)
+		$(use_enable modutils modules)
 		$(use_enable selinux)
 		$(use_enable static-libs static)
 	)
@@ -152,20 +146,12 @@ src_configure()
 
 src_install()
 {
-	local lib_LTLIBRARIES=libudev.la \
-		pkgconfiglib_DATA=src/libudev/libudev.pc
-
-	if use gudev
-	then
-		lib_LTLIBRARIES+=" libgudev-1.0.la"
-		pkgconfiglib_DATA+=" src/gudev/gudev-1.0.pc"
-	fi
-
-	emake DESTDIR="${ED}" install
+	emake DESTDIR="${D}" install
 
 	prune_libtool_files --all
+	rm -rf "${ED}"/usr/share/doc/${PF}/LICENSE.*
 
-#	# install gentoo-specific rules
+	# install gentoo-specific rules
 	insinto /usr/lib/udev/rules.d
 	doins "${FILESDIR}"/40-gentoo.rules
 }
@@ -174,9 +160,9 @@ pkg_preinst()
 {
 	local htmldir
 	for htmldir in gudev libudev; do
-		if [[ -d ${EROOT}usr/share/gtk-doc/html/${htmldir} ]]
+		if [[ -d ${EROOT}/usr/share/gtk-doc/html/${htmldir} ]]
 		then
-			rm -rf "${EROOT}"usr/share/gtk-doc/html/${htmldir}
+			rm -rf "${EROOT}"/usr/share/gtk-doc/html/${htmldir}
 		fi
 		if [[ -d ${ED}/usr/share/doc/${PF}/html/${htmldir} ]]
 		then
@@ -184,7 +170,7 @@ pkg_preinst()
 				/usr/share/gtk-doc/html/${htmldir}
 		fi
 	done
-	preserve_old_lib "/$(get_libdir)/libudev.so.0"
+	preserve_old_lib /$(get_libdir)/libudev.so.0
 }
 
 pkg_postinst()
@@ -196,19 +182,28 @@ pkg_postinst()
 	rmdir "${EROOT}"/dev/loop 2>/dev/null
 	if [[ -d ${EROOT}/dev/loop ]]
 	then
-		ewarn "Please make sure your remove /dev/loop,"
+		ewarn "Please make sure you remove /dev/loop,"
 		ewarn "else losetup may be confused when looking for unused devices."
 	fi
 
+	# 64-device-mapper.rules now gets installed by sys-fs/device-mapper
+	# remove it if user don't has sys-fs/device-mapper installed, 27 Jun 2007
+	if [[ -f ${EROOT}/etc/udev/rules.d/64-device-mapper.rules ]] &&
+		! has_version sys-fs/device-mapper
+	then
+		rm -f "${EROOT}"/etc/udev/rules.d/64-device-mapper.rules
+		einfo "Removed unneeded file 64-device-mapper.rules"
+	fi
+
 	ewarn
-	ewarn "You need to restart udev as soon as possible to make the upgrade go"
-	ewarn "into effect."
+	ewarn "You need to restart eudev as soon as possible to make the"
+	ewarn "upgrade go into effect."
 	ewarn "The method you use to do this depends on your init system."
 
-	preserve_old_lib_notify "/$(get_libdir)/libudev.so.0"
+	preserve_old_lib_notify "${EROOT}/$(get_libdir)/libudev.so.0"
 
 	elog
-	elog "For more information on udev on Gentoo, writing udev rules, and"
-	elog "         fixing known issues visit:"
+	elog "For more information on eudev on Gentoo, writing udev rules, and"
+	elog "fixing known issues visit:"
 	elog "         http://www.gentoo.org/doc/en/udev-guide.xml"
 }
