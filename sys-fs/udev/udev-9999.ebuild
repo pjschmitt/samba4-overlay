@@ -67,6 +67,22 @@ udev_check_KV()
 	return 0
 }
 
+pkg_pretend()
+{
+	if has_version "<sys-fs/udev-180"; then
+	ewarn "This package does not contain the libudev.so.0 library."
+	ewarn "Although we try to ensure that library file is preseved, this will not work"
+	ewarn "if you manually --unmerge your current version of sys-fs/udev prior to "
+	ewarn "emerging this package, as may be necessary to resolve blockages."
+	ewarn ""
+	ewarn "Removal of libudev.so.0 will effectively break any active Xorg sessions, and "
+	ewarn "will probably have repercussions with other software as well.  A revdep-rebuild"
+	ewarn "is required to resolve these issues."
+	ewarn ""
+	ewarn "We apologize for the inconvenience that this will cause."
+	fi
+}
+
 pkg_setup()
 {
 	# required kernel options
