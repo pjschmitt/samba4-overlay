@@ -7,7 +7,19 @@ PYTHON_DEPEND="2"
 
 inherit confutils python waf-utils multilib linux-info
 
-MY_P="${PN}-${HOMEPAGE="http://www.samba.org/"
+MY_P="${PN}-${PV}"
+
+if [ "${PV}" = "4.9999" ]; then
+	EGIT_REPO_URI="git://git.samba.org/samba.git"
+	KEYWORDS=""
+	inherit git-2
+else
+	SRC_URI="mirror://samba/${PN}-${PV}.tar.gz"
+	KEYWORDS="~amd64 ~x86"
+fi
+
+DESCRIPTION="Samba Suite Version 4"
+HOMEPAGE="http://www.samba.org/"
 LICENSE="GPL-3"
 
 SLOT="0"
@@ -31,7 +43,7 @@ RDEPEND="dev-libs/iniparser
 	ads? ( client? ( net-fs/cifs-utils[ads] ) )
 	client? ( net-fs/cifs-utils )
 	cluster? ( >=dev-db/ctdb-1.0.114_p1 )
-	ldap? ( net-nds/openldap [kerberos] )
+	ldap? ( net-nds/openldap )
 	gnutls? ( >=net-libs/gnutls-1.4.0 )
 	selinux? ( sec-policy/selinux-samba )"
 DEPEND="${RDEPEND}
@@ -131,7 +143,7 @@ pkg_postinst() {
 	python_mod_optimize "${PN}"
 
 	# Warn that it's a release candidate
-	ewarn "This is not necessarily compatible with Samba 3. Read the wiki page."
+	ewarn "This is not a the supported version: Read the Wiki for information."
 
 	einfo "See http://wiki.samba.org/index.php/Samba4/HOWTO for more"
 	einfo "information about samba 4."
