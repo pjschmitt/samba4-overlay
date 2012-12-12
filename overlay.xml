@@ -2,14 +2,14 @@
 <!DOCTYPE repositories SYSTEM "repositories.dtd">
 <repositories xmlns="" version="1.0">
   <repo quality="experimental" status="unofficial">
-    <name>udev-overlay</name>
-    <description>Overlay for Gentoo Udev Development</description>
-    <homepage>https://github.com/gentoo/udev-overlay</homepage>
+    <name>samba4-overlay</name>
+    <description>Overlay for Gentoo Samba 4 integration</description>
+    <homepage>https://github.com/pjschmitt/samba4-overlay</homepage>
     <owner type="project">
-      <email>ryao@gentoo.org</email>
-      <name>Richard Yao</name>
+      <email>schmitt953@yahoo.com</email>
+      <name>Parker Schmitt</name>
     </owner>
-    <source type="git">git://github.com/gentoo/udev-overlay.git</source>
-    <feed>https://github.com/gentoo/udev-overlay/commits/master.atom</feed>
+    <source type="git">git://github.com/pjschmitt/samba4-overlay.git</source>
+    <feed>https://github.com/pjschmitt/samba4-overlay/commits/master.atom</feed>
   </repo>
 </repositories>
